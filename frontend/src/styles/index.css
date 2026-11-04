@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --fondo: #0b0f14;
+  --panel: #121821;
+  --panel-alto: #172030;
+  --borde: #223047;
+  --texto: #e6edf6;
+  --texto-suave: #93a4bd;
+  --acento: #4f9dff;
+  --verde: #35c48a;
+  --ambar: #f0b429;
+  --rojo: #f0595c;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply antialiased;
+    background: var(--fondo);
+    color: var(--texto);
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--fondo);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--borde);
+    border-radius: 5px;
+  }
+}
+
+@layer components {
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+  }
+  .panel-alto {
+    background: var(--panel-alto);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition;
+    border: 1px solid var(--borde);
+    background: var(--panel-alto);
+    color: var(--texto);
+    cursor: pointer;
+  }
+  .btn:hover:not(:disabled) {
+    border-color: var(--acento);
+    background: #1c2942;
+  }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .btn-primario {
+    background: var(--acento);
+    border-color: var(--acento);
+    color: #04101f;
+    font-weight: 600;
+  }
+  .btn-primario:hover:not(:disabled) {
+    background: #6cb0ff;
+    border-color: #6cb0ff;
+  }
+  .btn-peligro {
+    border-color: #5a2b33;
+    color: var(--rojo);
+  }
+  .btn-peligro:hover:not(:disabled) {
+    background: #2a1519;
+    border-color: var(--rojo);
+  }
+  .campo {
+    @apply w-full rounded-lg px-3 py-2 text-sm;
+    background: #0e141d;
+    border: 1px solid var(--borde);
+    color: var(--texto);
+    outline: none;
+  }
+  .campo:focus {
+    border-color: var(--acento);
+  }
+  .etiqueta {
+    @apply mb-1 block text-xs font-medium uppercase tracking-wide;
+    color: var(--texto-suave);
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium;
+    border: 1px solid var(--borde);
+  }
+  .tabla {
+    @apply w-full text-left text-sm;
+    border-collapse: collapse;
+  }
+  .tabla th {
+    @apply px-3 py-2 text-xs font-semibold uppercase tracking-wide;
+    color: var(--texto-suave);
+    border-bottom: 1px solid var(--borde);
+    position: sticky;
+    top: 0;
+    background: var(--panel);
+    z-index: 1;
+  }
+  .tabla td {
+    @apply px-3 py-2;
+    border-bottom: 1px solid #1a2333;
+  }
+  .tabla tbody tr:hover {
+    background: #151d2a;
+  }
+}

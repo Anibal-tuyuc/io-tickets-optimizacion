@@ -1,0 +1,24 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: io-tickets-optimizacion:latest
+    container_name: io-tickets-optimizacion
+    ports:
+      # Se usa 8080 por defecto porque el 8000 local suele estar ocupado por
+      # el uvicorn de desarrollo. Cambiable con IO_PORT.
+      - "${IO_PORT:-8080}:8000"
+    environment:
+      IO_SOURCE_XLSX: /app/data/source/Control_Prueba_IO.xlsx
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=4).status==200 else 1)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s

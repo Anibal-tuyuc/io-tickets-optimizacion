@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pruebas:
+    name: Pruebas del motor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Instalar dependencias
+        run: pip install -r backend/requirements.txt
+
+      - name: Ejecutar pruebas
+        working-directory: backend
+        run: python -m pytest tests -q --tb=short
+
+  frontend:
+    name: Typecheck y build del frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias
+        working-directory: frontend
+        run: npm ci
+
+      - name: Typecheck
+        working-directory: frontend
+        run: npx tsc -b --noEmit
+
+      - name: Build
+        working-directory: frontend
+        run: VITE_API_BASE="" npx vite build
+
+  docker:
+    name: Construir imagen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: io-tickets-optimizacion:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verificar que el contenedor responde
+        run: |
+          docker run -d --name io-ci -p 8000:8000 io-tickets-optimizacion:ci
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8000/health > /dev/null; then
+              echo "Health OK"; docker logs io-ci; exit 0
+            fi
+            sleep 2
+          done
+          echo "El contenedor no respondió"; docker logs io-ci; exit 1

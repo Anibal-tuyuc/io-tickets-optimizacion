@@ -1,0 +1,23 @@
+# Dependencias locales (se reinstalan dentro de la imagen)
+.venv/
+**/node_modules/
+frontend/dist/
+frontend/shot.mjs
+frontend/e2e.mjs
+
+# Artefactos y caché
+data/cache/
+data/results/
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+
+# Control de versiones y documentación de trabajo
+.git/
+.github/
+*.md
+!README.md
+
+# Sistema
+.DS_Store
+Thumbs.db

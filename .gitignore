@@ -1,0 +1,31 @@
+# Entorno virtual y dependencias
+.venv/
+venv/
+**/node_modules/
+
+# Artefactos de build
+frontend/dist/
+frontend/shot.mjs
+frontend/e2e.mjs
+frontend/docker-check.mjs
+
+# Caché y salidas generadas
+data/cache/
+data/results/
+!data/results/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
