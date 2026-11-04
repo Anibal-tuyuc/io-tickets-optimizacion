@@ -3,6 +3,22 @@
 **Universidad Mariano Gálvez de Guatemala** — Investigación de Operaciones, Sexto Semestre
 Proyecto final: asignación equitativa de tickets HelpDesk y programación de supervisión docente.
 
+[![CI](https://github.com/Anibal-tuyuc/io-tickets-optimizacion/actions/workflows/ci.yml/badge.svg)](https://github.com/Anibal-tuyuc/io-tickets-optimizacion/actions/workflows/ci.yml)
+
+---
+
+## Arranque rápido con Docker
+
+Una sola orden levanta el backend, el frontend compilado y la base de prueba:
+
+```bash
+docker compose up --build
+```
+
+Abrir **http://localhost:8080** · API en `/docs`
+
+El puerto se cambia con `IO_PORT=9000 docker compose up`.
+
 ---
 
 ## Qué hace
@@ -20,7 +36,7 @@ Proyecto final: asignación equitativa de tickets HelpDesk y programación de su
 
 ---
 
-## Arranque
+## Arranque en desarrollo
 
 Requiere Python 3.11+ y Node 18+.
 
@@ -114,3 +130,37 @@ Y además las invariantes críticas del modelo: ningún gestor con dos sesiones 
 | Cobertura de obligatorias | — | 100% |
 
 Con el Gestor 1 de vacaciones el 13-oct queda infeasible (5 sesiones obligatorias, 4 gestores). Es un hecho del dataset, no un fallo: el sistema lo demuestra y lo reporta.
+
+---
+
+## Documentación
+
+| Documento | Contenido |
+| :--- | :--- |
+| [`docs/informe_tecnico.pdf`](docs/pdf/informe_tecnico.pdf) | Informe técnico completo (29 páginas): análisis, modelo matemático, manual, pruebas y bitácora de IA |
+| [`docs/guion_video.md`](docs/guion_video.md) | Guion del video explicativo, con minutaje y defensa anticipada de preguntas |
+| [`docs/pdf/guion_video.pdf`](docs/pdf/guion_video.pdf) | El mismo guion en PDF |
+
+---
+
+## Estructura del repositorio
+
+```
+backend/     API FastAPI, ETL, motor de optimización y pruebas
+frontend/    Interfaz React + TypeScript
+data/source/ Excel de control (solo lectura)
+docs/        Informe, guion y generador de PDF
+```
+
+---
+
+## Docker
+
+La imagen es multi-etapa: compila el frontend con Node y lo sirve desde FastAPI con Python 3.12 slim. Pesa **603 MB**, corre como usuario sin privilegios y expone un `HEALTHCHECK` contra `/health`.
+
+```bash
+docker build -t io-tickets-optimizacion .
+docker run -p 8080:8000 io-tickets-optimizacion
+```
+
+El Excel se incluye en la imagen (`data/source/`) y la ruta se resuelve por la variable `IO_SOURCE_XLSX`, así que el contenedor funciona sin depender de rutas del equipo de desarrollo.
