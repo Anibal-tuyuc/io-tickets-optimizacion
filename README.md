@@ -149,7 +149,6 @@ Con el Gestor 1 de vacaciones el 13-oct queda infeasible (5 sesiones obligatoria
 backend/     API FastAPI, ETL, motor de optimización y pruebas
 frontend/    Interfaz React + TypeScript
 data/source/ Excel de control (solo lectura)
-docs/        Informe, guion y generador de PDF
 ```
 
 ---
